@@ -1,0 +1,202 @@
+[
+  {
+    "name": "Organic Gala Apples",
+    "price": "4.99",
+    "category": "food",
+    "image": "https://plus.unsplash.com/premium_photo-1661322640130-f6a1e2c36653?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8YXBwbGV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=600",
+    "unit": "per kg",
+    "stock": 150
+  },
+  {
+    "name": "Men's Cotton T-Shirt",
+    "price": "24.99",
+    "category": "clothing",
+    "image": "https://plus.unsplash.com/premium_photo-1707932495000-5748b915e4f2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGZhc2hpb258ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=600",
+    "unit": "per item",
+    "stock": 80
+  },
+  {
+    "name": "Wireless Bluetooth Headphones",
+    "price": "149.99",
+    "category": "electronics",
+    "image": "https://plus.unsplash.com/premium_photo-1678099940967-73fe30680949?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8d2lyZWxlc3MlMjBoZWFkcGhvbmVzfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=600",
+    "unit": "per unit",
+    "stock": 45
+  },
+  {
+    "name": "Artisanal Sourdough Bread",
+    "price": "6.49",
+    "category": "food",
+    "image": "https://images.unsplash.com/photo-1598373182133-52452f7691ef?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YnJlYWR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=600",
+    "unit": "per loaf",
+    "stock": 60
+  },
+  {
+    "name": "Women's Denim Jeans",
+    "price": "59.99",
+    "category": "clothing",
+    "image": "https://plus.unsplash.com/premium_photo-1673977134363-c86a9d5dcafa?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8ZGVuaW0lMjBwYW50c3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600",
+    "unit": "per item",
+    "stock": 70
+  },
+  {
+    "name": "4K Ultra HD Smart TV",
+    "price": "499.00",
+    "category": "electronics",
+    "image": "https://media.istockphoto.com/id/614142568/photo/curved-tv-isolated-on-white.webp?a=1&b=1&s=612x612&w=0&k=20&c=-HAzuHfH3xnG5ndHTnqXsuzwhmonFqT_qFIC84OHIF4=",
+    "unit": "per unit",
+    "stock": 20
+  },
+  {
+    "name": "Fresh Atlantic Salmon",
+    "price": "19.99",
+    "category": "food",
+    "image": "https://plus.unsplash.com/premium_photo-1723478431094-4854c4555fc2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c2FsbW9ufGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=600",
+    "unit": "per lb",
+    "stock": 40
+  },
+  {
+    "name": "Classic Leather Wallet",
+    "price": "39.99",
+    "category": "clothing",
+    "image": "https://images.unsplash.com/photo-1579014134953-1580d7f123f3?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8d2FsbGV0fGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=600",
+    "unit": "per item",
+    "stock": 110
+  },
+  {
+    "name": "Portable Power Bank",
+    "price": "29.99",
+    "category": "electronics",
+    "image": "https://images.unsplash.com/photo-1614399113305-a127bb2ca893?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cG93ZXJiYW5rfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=600",
+    "unit": "per unit",
+    "stock": 90
+  },
+  {
+    "name": "Organic Greek Yogurt",
+    "price": "3.99",
+    "category": "food",
+    "image": "https://images.unsplash.com/photo-1614399113305-a127bb2ca893?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cG93ZXJiYW5rfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=600",
+    "unit": "per tub",
+    "stock": 120
+  },
+  {
+    "name": "Men's Running Shoes",
+    "price": "89.99",
+    "category": "clothing",
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cnVubmluZyUyMHNob2VzfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=600",
+    "unit": "per pair",
+    "stock": 65
+  },
+  {
+    "name": "Smartwatch Fitness Tracker",
+    "price": "199.00",
+    "category": "electronics",
+    "image": "https://plus.unsplash.com/premium_photo-1712764121254-d9867c694b81?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c21hcnQlMjB3YXRjaHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600",
+    "unit": "per unit",
+    "stock": 55
+  },
+  {
+    "name": "Cage-Free Brown Eggs",
+    "price": "5.49",
+    "category": "food",
+    "image": "https://plus.unsplash.com/premium_photo-1712764121254-d9867c694b81?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c21hcnQlMjB3YXRjaHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600",
+    "unit": "per dozen",
+    "stock": 200
+  },
+  {
+    "name": "Women's Summer Dress",
+    "price": "45.00",
+    "category": "clothing",
+    "image": "https://images.unsplash.com/photo-1542295669297-4d352b042bca?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8c3VtbWVyJTIwZHJlc3N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=600",
+    "unit": "per item",
+    "stock": 85
+  },
+  {
+    "name": "Wireless Gaming Mouse",
+    "price": "69.99",
+    "category": "electronics",
+    "image": "https://images.unsplash.com/photo-1660491083562-d91a64d6ea9c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8V2lyZWxlc3MlMjBHYW1pbmclMjBNb3VzZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600",
+    "unit": "per unit",
+    "stock": 75
+  },
+  {
+    "name": "Avocado Hass",
+    "price": "2.50",
+    "category": "food",
+    "image": "https://images.unsplash.com/photo-1594959866993-63d110d379c2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8QXZvY2FkbyUyMEhhc3N8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=600",
+    "unit": "per item",
+    "stock": 130
+  },
+  {
+    "name": "Men's Winter Jacket",
+    "price": "120.00",
+    "category": "clothing",
+    "image": "https://plus.unsplash.com/premium_photo-1670623042512-1a5ecebc3f42?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8TWVuJ3MlMjBXaW50ZXIlMjBKYWNrZXR8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=600",
+    "unit": "per item",
+    "stock": 40
+  },
+  {
+    "name": "Digital SLR Camera",
+    "price": "899.99",
+    "category": "electronics",
+    "image": "https://images.unsplash.com/photo-1625545013865-80da35181abf?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZHNscnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600",
+    "unit": "per unit",
+    "stock": 15
+  },
+  {
+    "name": "Dark Chocolate Bar (70%)",
+    "price": "3.29",
+    "category": "food",
+    "image": "https://images.unsplash.com/photo-1600231409360-e58ed635543a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8RGFyayUyMENob2NvbGF0ZSUyMEJhciUyMCg3MCUyNSl8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=600",
+    "unit": "per bar",
+    "stock": 180
+  },
+  {
+    "name": "Leather Belt",
+    "price": "34.99",
+    "category": "clothing",
+    "image": "https://images.unsplash.com/photo-1711443982852-b3df5c563448?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8YmVsdHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600",
+    "unit": "per item",
+    "stock": 95
+  },
+  {
+    "name": "1TB External Hard Drive",
+    "price": "59.99",
+    "category": "electronics",
+    "image": "1TB External Hard Drive",
+    "unit": "per unit",
+    "stock": 60
+  },
+  {
+    "name": "Whole Bean Coffee",
+    "price": "14.99",
+    "category": "food",
+    "image": "https://images.unsplash.com/photo-1562051036-e0eea191d42f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8YmVhbiUyMGNvZmZlZSUyMGJhZ3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600",
+    "unit": "per bag",
+    "stock": 100
+  },
+  {
+    "name": "Wool Scarf",
+    "price": "29.99",
+    "category": "clothing",
+    "image": "https://images.unsplash.com/photo-1599948126830-89f10444e491?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8d29vbCUyMHNjYXJmfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=600",
+    "unit": "per item",
+    "stock": 115
+  },
+  {
+    "name": "Mechanical Keyboard",
+    "price": "119.99",
+    "category": "electronics",
+    "image": "https://images.unsplash.com/photo-1713713717233-dd5cd01133a9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8bWVjaCUyMGtleWJvYXJkfGVufDB8fDB8fHww&auto=format&fit=crop&q=60&w=600",
+    "unit": "per unit",
+    "stock": 50
+  },
+  {
+    "name": "Extra Virgin Olive Oil",
+    "price": "12.99",
+    "category": "food",
+    "image": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8b2xpdmUlMjBvaWx8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=600",
+    "unit": "per bottle",
+    "stock": 80
+  }
+]

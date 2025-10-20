@@ -3,6 +3,8 @@ import Header from '../Header';
 import { Plus, Minus, Search, ShoppingCart, X, CreditCard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+const API_BASE_URL='http://localhost:5000/api';
+
 const categories = ['All', 'Vegetables', 'Fruits', 'Dairy', 'Bakery', 'Snacks', 'Beverages'];
 
 const dummyProducts = [
@@ -47,6 +49,18 @@ const dummyProducts = [
     unit: 'per pack'
   }
 ];
+
+interface Product {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  image: string;
+  quantity: number;
+  trackQuantity: boolean;
+  unit?: string;
+}
 
 interface CartItem {
   id: number;

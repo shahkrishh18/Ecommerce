@@ -45,7 +45,7 @@ function OrderTracking() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex flex-row items-center gap-4 py-2 mb-4">
           <button
-            onClick={() => navigate("checkout")}
+            onClick={() => navigate("/checkout")}
             className="p-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex-shrink-0"
           >
             <ArrowLeft size={20} className="text-gray-600" />

@@ -7,17 +7,20 @@ import AdminDashboard from './components/admin/AdminDashboard';
 import DeliveryDashboard from './components/delivery/DeliveryDashboard';
 import OrderCheckout from './components/customer/OrderCheckout';
 import OrderTracking from './components/customer/OrderTracking';
+import OrderAccepted from './components/delivery/OrderAccepted';
+import DeliveryStatus from './components/delivery/DeliveryStatus';
+import DeliveryPartners from './components/admin/DeliveryPartners';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='*' element={<Navigate to='/' replace />} />
-        <Route path="/" element={<Login />} />
+        <Route path='*' element={<Navigate to='/login' replace />} />
+        <Route path="/login" element={<Login />} />
         <Route
           path="/customer"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole='customer' >
               <CustomerDashboard />
             </ProtectedRoute>
           }
@@ -25,7 +28,7 @@ function App() {
         <Route
           path="/checkout"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole='customer'>
               <OrderCheckout />
             </ProtectedRoute>
           }
@@ -33,7 +36,7 @@ function App() {
         <Route
           path="/admin"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole='admin'>
               <AdminDashboard />
             </ProtectedRoute>
           }
@@ -41,16 +44,40 @@ function App() {
         <Route
           path="/delivery"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole='delivery'>
               <DeliveryDashboard />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/OrderTracking"
+          path="/ordertracking"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requiredRole='customer'>
               <OrderTracking />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orderaccepted"
+          element={
+            <ProtectedRoute requiredRole='delivery'>
+              <OrderAccepted />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/deliverystatus"
+          element={
+            <ProtectedRoute requiredRole='delivery'>
+              <DeliveryStatus />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/deliverypartners"
+          element={
+            <ProtectedRoute requiredRole='admin'>
+              <DeliveryPartners />
             </ProtectedRoute>
           }
         />

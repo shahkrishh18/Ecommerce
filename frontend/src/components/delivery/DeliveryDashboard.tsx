@@ -1,5 +1,6 @@
 import { Box, MapPin, Star, DollarSign, Package, Clock } from 'lucide-react';
 import Logout from '../Logout';
+import { useNavigate } from 'react-router-dom';
 
 interface Order {
   id: string;
@@ -13,6 +14,8 @@ interface Order {
 }
 
 function DeliveryDashboard() {
+
+  const navigate = useNavigate();
   const stats = [
     {
       title: "Today's Earnings",
@@ -144,7 +147,7 @@ function DeliveryDashboard() {
                     <span className="text-sm">{order.eta}</span>
                     <span className="text-sm">• {order.distance}</span>
                   </div>
-                  <button className="px-6 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors">
+                  <button onClick={() => navigate('/orderaccepted')} className="px-6 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors">
                     Accept Order
                   </button>
                 </div>

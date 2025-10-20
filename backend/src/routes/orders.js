@@ -5,8 +5,10 @@ const {
   getOrder, 
   updateOrderStatus,
   assignDeliveryPartner,
-  getUnassignedOrders
+  getUnassignedOrders,
+  acceptOrder
 } = require('../controllers/orderController');
+
 const { auth, authorize } = require('../middleware/auth');
 
 const router = express.Router();
@@ -19,10 +21,10 @@ router.route('/')
 
 router.get('/unassigned', authorize('delivery', 'admin'), getUnassignedOrders);
 
-router.route('/:id')
-  .get(getOrder)
-  .put(updateOrderStatus);
+router.get('/:id', getOrder);
+router.put('/:id/status', updateOrderStatus);
 
 router.put('/:id/assign', authorize('admin'), assignDeliveryPartner);
+router.post('/:id/accept', authorize('delivery'), acceptOrder);
 
 module.exports = router;

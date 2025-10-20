@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../Header';
 import { Plus, Minus, Search, ShoppingCart, X, Loader, Package } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -163,9 +163,9 @@ const CustomerDashboard = () => {
   //   }
   // };
 
-  // useEffect(() => {
-  //   fetchProducts();
-  // }, []);
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   const handleAddToCart = (product: Product, quantity: number) => {
     setCart(prevCart => {

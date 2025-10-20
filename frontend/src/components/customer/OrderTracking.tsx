@@ -163,7 +163,7 @@
 
 // export default OrderTracking;
 
-import { ArrowLeft, Package, Box, Truck, CheckCircle, MapPin, Loader, Clock } from "lucide-react";
+import { ArrowLeft, Package, Truck, CheckCircle, MapPin, Loader, } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import type { JSX } from "react";

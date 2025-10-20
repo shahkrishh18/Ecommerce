@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Header from '../Header';
-import { Plus, Minus, Search, ShoppingCart, X, CreditCard, Loader, Package } from 'lucide-react';
+import { Plus, Minus, Search, ShoppingCart, X, Loader, Package } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const API_BASE_URL = 'http://localhost:5000/api';
@@ -136,36 +136,36 @@ const CustomerDashboard = () => {
     }
   };
 
-  // Create order in backend
-  const createOrder = async (orderData: any) => {
-    try {
-      const token = localStorage.getItem('token');
+  // // Create order in backend
+  // const createOrder = async (orderData: any) => {
+  //   try {
+  //     const token = localStorage.getItem('token');
       
-      const response = await fetch(`${API_BASE_URL}/orders`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderData),
-      });
+  //     const response = await fetch(`${API_BASE_URL}/orders`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Authorization': `Bearer ${token}`,
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(orderData),
+  //     });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to create order');
-      }
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       throw new Error(errorData.message || 'Failed to create order');
+  //     }
 
-      const result = await response.json();
-      return result;
-    } catch (err: any) {
-      console.error('Error creating order:', err);
-      throw err;
-    }
-  };
+  //     const result = await response.json();
+  //     return result;
+  //   } catch (err: any) {
+  //     console.error('Error creating order:', err);
+  //     throw err;
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  // useEffect(() => {
+  //   fetchProducts();
+  // }, []);
 
   const handleAddToCart = (product: Product, quantity: number) => {
     setCart(prevCart => {

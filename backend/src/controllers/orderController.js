@@ -43,6 +43,7 @@ exports.createOrder = async (req, res, next) => {
     
     // Create order
     const order = await Order.create({
+      orderId: `ORD-${Date.now()}`,
       customer: req.user.id,
       items: orderItems,
       deliveryAddress,

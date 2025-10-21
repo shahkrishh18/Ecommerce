@@ -85,7 +85,6 @@ function LiveStatus({ stats, orders }: LiveStatusProps) {
 
   const distribution = calculateOrderDistribution();
 
-  // Get recent order updates (last 10 orders)
   const recentOrderUpdates = orders
     .slice(0, 10)
     .map(order => ({
@@ -95,18 +94,14 @@ function LiveStatus({ stats, orders }: LiveStatusProps) {
       message: getStatusMessage(order.status, order.customer.profile.firstName)
     }));
 
-  // Get active delivery partners from orders
   const getActiveDeliveryPartners = () => {
     const activePartners = new Map();
     
     orders.forEach(order => {
       if (order.status === 'assigned' || order.status === 'picked_up' || order.status === 'in_transit') {
-        // Count orders per status for active deliveries
-        // In a real app, you'd have actual partner data here
       }
     });
 
-    // Mock data for demonstration - replace with real partner data
     return [
       { name: 'Delivery Partner 1', currentOrders: Math.floor(Math.random() * 3) + 1, isActive: true },
       { name: 'Delivery Partner 2', currentOrders: Math.floor(Math.random() * 3) + 1, isActive: true },
@@ -116,7 +111,6 @@ function LiveStatus({ stats, orders }: LiveStatusProps) {
 
   const activePartners = getActiveDeliveryPartners();
 
-  // Helper function to get time ago
   function getTimeAgo(dateString: string): string {
     const date = new Date(dateString);
     const now = new Date();
@@ -130,7 +124,6 @@ function LiveStatus({ stats, orders }: LiveStatusProps) {
     return `${Math.floor(diffHours / 24)} days ago`;
   }
 
-  // Helper function to get status message
   function getStatusMessage(status: string, customerName: string): string {
     const messages: { [key: string]: string } = {
       'pending': `Order placed by ${customerName}`,
@@ -147,12 +140,10 @@ function LiveStatus({ stats, orders }: LiveStatusProps) {
     return messages[status] || `Order ${status} for ${customerName}`;
   }
 
-  // Calculate delivery rate
   const deliveryRate = stats && stats.todayOrders > 0 
     ? Math.round((distribution.delivered / stats.todayOrders) * 100)
     : 0;
 
-  // Calculate active deliveries
   const activeDeliveries = distribution.outForDelivery;
 
   return (

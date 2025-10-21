@@ -101,14 +101,13 @@ function AdminDashboard() {
     }
   };
 
-  // Manual refresh
   const handleRefresh = async () => {
     setRefreshing(true);
     await fetchDashboardData();
     setRefreshing(false);
   };
 
-  // WebSocket setup for real-time updates
+  // WebSocket
   useEffect(() => {
     const initializeSocket = () => {
       const token = localStorage.getItem('token');
@@ -117,47 +116,47 @@ function AdminDashboard() {
       });
 
       socketInstance.on('connect', () => {
-        console.log('🔌 Admin Dashboard connected to WebSocket');
+        console.log(' Admin Dashboard connected to WebSocket');
         // Join admin room for all admin updates
         socketInstance.emit('joinAdminRoom');
       });
 
-      // Listen for order updates from anywhere in the system
+      // Listening for order updates from anywhere in the system
       socketInstance.on('orderUpdated', (updatedOrder: Order) => {
-        console.log('📨 Real-time order update received:', updatedOrder);
+        console.log(' Real-time order update received:', updatedOrder);
         setOrders(prev => prev.map(order => 
           order._id === updatedOrder._id ? updatedOrder : order
         ));
         setLastUpdate(new Date().toLocaleTimeString());
       });
 
-      // Listen for new orders
+      // Listening for new orders
       socketInstance.on('newOrderAvailable', () => {
-        console.log('🆕 New order created - refreshing data');
+        console.log(' New order created - refreshing data');
         fetchDashboardData();
       });
 
-      // Listen for delivery partner updates
+      // Listening for delivery partner updates
       socketInstance.on('deliveryStatusUpdated', (data: any) => {
-        console.log('🔄 Delivery status updated:', data);
+        console.log(' Delivery status updated:', data);
         // Refresh delivery partners data
         fetchDeliveryPartners();
       });
 
       // Listen for admin-specific order assignments
       socketInstance.on('adminOrderUpdated', (data: any) => {
-        console.log('👤 Admin order assignment:', data);
+        console.log(' Admin order assignment:', data);
         fetchDashboardData();
       });
 
       socketInstance.on('connect_error', (error: any) => {
-        console.error('❌ WebSocket connection error:', error);
+        console.error(' WebSocket connection error:', error);
       });
 
       setSocket(socketInstance);
     };
 
-    // Initial data load
+    // Initial data
     const loadData = async () => {
       setLoading(true);
       await fetchDashboardData();
@@ -255,7 +254,6 @@ function AdminDashboard() {
           </div>
         </div>
 
-        {/* Toggle Navigation */}
         <div className="flex justify-center mb-8">
           <div className="bg-white p-1 rounded-xl shadow-sm border border-gray-200 flex gap-1">
             <button
@@ -323,7 +321,6 @@ function AdminDashboard() {
           </div>
         </div>
 
-        {/* Content based on active tab */}
         <div className="mt-6">
           {activeTab === 'orders' && (
             <OrdersTable 

@@ -6,7 +6,7 @@ interface DeliveryPartnersProps {
 }
 
 function DeliveryPartners({ partners }: DeliveryPartnersProps) {
-  // Calculate stats from real data
+
   const calculateStats = () => {
     const totalPartners = partners.length;
     const active = partners.filter(partner => 
@@ -32,14 +32,11 @@ function DeliveryPartners({ partners }: DeliveryPartnersProps) {
 
   const stats = calculateStats();
 
-  // Calculate today's earnings (mock calculation - replace with real data if available)
   const calculateTodaysEarnings = (partner: DeliveryPartner) => {
-    // Mock calculation - in real app, calculate from today's deliveries
     const baseEarnings = partner.deliveryDetails.totalDeliveries * 0.5;
     return Math.round(baseEarnings * 100) / 100;
   };
 
-  // Calculate today's deliveries (mock calculation)
   const calculateTodaysDeliveries = (partner: DeliveryPartner) => {
     // Mock calculation - in real app, count today's deliveries from orders
     return Math.floor(Math.random() * 8);
@@ -53,10 +50,8 @@ function DeliveryPartners({ partners }: DeliveryPartnersProps) {
     return partner.deliveryDetails.isAvailable ? 'Active' : 'Busy';
   };
 
-  // Get area from current location (mock - replace with real geocoding if available)
   const getPartnerArea = (partner: DeliveryPartner) => {
     if (partner.deliveryDetails.currentLocation) {
-      // Mock area based on coordinates - in real app, use reverse geocoding
       const areas = ['Downtown Area', 'North District', 'South Zone', 'East Side', 'West End'];
       return areas[Math.floor(Math.random() * areas.length)];
     }
@@ -71,7 +66,6 @@ function DeliveryPartners({ partners }: DeliveryPartnersProps) {
           <p className="text-gray-600">Manage your delivery partner network</p>
         </div>
 
-        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           {stats.map((stat) => (
             <div key={stat.label} 
@@ -81,8 +75,6 @@ function DeliveryPartners({ partners }: DeliveryPartnersProps) {
             </div>
           ))}
         </div>
-
-        {/* Search Bar */}
         <div className="relative mb-6">
           <Search className="absolute left-4 top-3.5 text-gray-400" size={20} />
           <input
@@ -92,7 +84,6 @@ function DeliveryPartners({ partners }: DeliveryPartnersProps) {
           />
         </div>
 
-        {/* Partners Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {partners.map((partner) => {
             const status = getPartnerStatus(partner);

@@ -27,7 +27,6 @@ interface CartItem {
 
 const categories = ['All', 'groceries', 'electronics', 'clothing', 'books', 'toys'];
 
-// Inline quantity selector component
 interface InlineQuantitySelectorProps {
   product: Product;
   onAdd: (product: Product, quantity: number) => void;
@@ -100,10 +99,7 @@ const CustomerDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Calculate cart total
   const cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-  // Calculate total items in cart
   const cartItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   // Fetch products from backend
@@ -135,33 +131,6 @@ const CustomerDashboard = () => {
       setLoading(false);
     }
   };
-
-  // // Create order in backend
-  // const createOrder = async (orderData: any) => {
-  //   try {
-  //     const token = localStorage.getItem('token');
-      
-  //     const response = await fetch(`${API_BASE_URL}/orders`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Authorization': `Bearer ${token}`,
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(orderData),
-  //     });
-
-  //     if (!response.ok) {
-  //       const errorData = await response.json();
-  //       throw new Error(errorData.message || 'Failed to create order');
-  //     }
-
-  //     const result = await response.json();
-  //     return result;
-  //   } catch (err: any) {
-  //     console.error('Error creating order:', err);
-  //     throw err;
-  //   }
-  // };
 
   useEffect(() => {
     fetchProducts();
@@ -195,7 +164,7 @@ const handleCheckout = async () => {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
     
-    console.log('🔐 Checkout Auth Check:', { token: !!token, userData: !!userData });
+    console.log('Checkout Auth Check:', { token: !!token, userData: !!userData });
     
     if (!token || !userData) {
       // Redirect to login if not authenticated
@@ -206,19 +175,17 @@ const handleCheckout = async () => {
       return;
     }
 
-    // Parse user data to check if user is active
     const user = JSON.parse(userData);
-    console.log('👤 User Data:', user);
+    console.log('User Data:', user);
 
-    // Instead of creating order immediately, navigate to checkout page with cart data
     navigate('/checkout', { 
       state: { 
-        cart: cart // Pass the cart data to checkout page
+        cart: cart
       } 
     });
 
   } catch (err: any) {
-    console.error('❌ Checkout error details:', err);
+    console.error('Checkout error details:', err);
     
     if (err.message.includes('Token is invalid') || err.message.includes('user is inactive')) {
       // Handle authentication issues
@@ -293,11 +260,8 @@ const handleCheckout = async () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <h2 className="text-2xl font-bold text-center">Product Catalog</h2>
         <p className="text-gray-600 mb-6 text-center">Browse and shop from our wide range of products</p>
-        
-        {/* Search & Cart Section */}
         <div className="flex justify-between items-center mb-4">
           <div className="relative w-full flex items-center gap-4">
-            {/* Search Container */}
             <div className="relative flex-1">
               <Search size={18} className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-400" />
               <input
@@ -312,8 +276,6 @@ const handleCheckout = async () => {
                           focus:bg-white focus:shadow-lg"
               />
             </div>
-
-            {/* Cart and Checkout Icons */}
             <div className="flex gap-3">
               <button 
                 onClick={() => setShowCart(true)}
@@ -346,7 +308,6 @@ const handleCheckout = async () => {
           </div>
         </div>
 
-        {/* Enhanced Categories */}
         <div className="flex gap-3 mb-8 overflow-x-auto pb-4 scrollbar-hide">
           {categories.map((category) => (
             <button
@@ -362,23 +323,15 @@ const handleCheckout = async () => {
             </button>
           ))}
         </div>
-
-        {/* Enhanced Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
           {filteredProducts.map((product) => (
-            <div
-              key={product._id}
-              className="group bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 ease-out transform hover:-translate-y-2 overflow-hidden border border-gray-100 hover:border-gray-200"
-            >
+            <div key={product._id} className="group bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 ease-out transform hover:-translate-y-2 overflow-hidden border border-gray-100 hover:border-gray-200">
               <div className="relative aspect-w-4 aspect-h-3 overflow-hidden">
                 <img
-                  src={product.images?.[0] || `https://picsum.photos/id/${Math.floor(Math.random() * 100)}/200/300`}
-                  alt={product.name}
-                  className="object-cover w-full h-64 group-hover:scale-110 transition-transform duration-500 ease-out"
+                  src={product.images?.[0] || `https://picsum.photos/id/${Math.floor(Math.random() * 100)}/200/300`} alt={product.name} className="object-cover w-full h-64 group-hover:scale-110 transition-transform duration-500 ease-out"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 
-                {/* Stock indicator */}
                 {product.trackQuantity && product.quantity < 10 && (
                   <div className="absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
                     Low Stock
@@ -426,7 +379,6 @@ const handleCheckout = async () => {
           ))}
         </div>
 
-        {/* Enhanced Cart Widget */}
         {showCart && (
           <div className="fixed bottom-6 right-6 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl border border-gray-200 w-96 z-50 transform transition-all duration-300 ease-out">
             <div className="p-5 border-b border-gray-100">
@@ -439,8 +391,7 @@ const handleCheckout = async () => {
                 </div>
                 <button 
                   onClick={() => setShowCart(false)}
-                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors"
-                >
+                  className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl transition-colors">
                   <X size={20} />
                 </button>
               </div>

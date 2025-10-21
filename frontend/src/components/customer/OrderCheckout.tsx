@@ -28,7 +28,6 @@ function OrderCheckout() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Form state
   const [deliveryAddress, setDeliveryAddress] = useState({
     fullName: '',
     street: '',
@@ -39,7 +38,6 @@ function OrderCheckout() {
   });
   const [paymentMethod, setPaymentMethod] = useState('card');
 
-  // Get cart data from location state
   useEffect(() => {
     if (location.state?.cart) {
       setCart(location.state.cart);
@@ -49,13 +47,11 @@ function OrderCheckout() {
     }
   }, [location.state, navigate]);
 
-  // Calculate order totals (matching backend logic)
   const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const deliveryFee = subtotal > 500 ? 0 : 49;
   const tax = subtotal * 0.18;
   const total = subtotal + deliveryFee + tax;
 
-  // Step definition with dynamic status
   const steps: Step[] = [
     {
       id: 1,
@@ -77,7 +73,6 @@ function OrderCheckout() {
     },
   ];
 
-  // Create order in backend - using your exact backend schema
   const createOrder = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -86,23 +81,22 @@ function OrderCheckout() {
         throw new Error('Authentication token not found');
       }
 
-      // Prepare order data exactly as your backend expects
       const orderData = {
         items: cart.map(item => ({
-          productId: item.product, // Matches your backend: item.productId
+          productId: item.product,
           quantity: item.quantity
         })),
         deliveryAddress: {
-          type: 'home', // Matches your backend enum
+          type: 'home',
           street: deliveryAddress.street,
           city: deliveryAddress.city,
           state: deliveryAddress.state,
           zipCode: deliveryAddress.zipCode,
           instructions: deliveryAddress.instructions || 'No special instructions'
         },
-        paymentMethod: paymentMethod, // Matches your backend enum: 'card', 'cash', 'digital_wallet'
+        paymentMethod: paymentMethod,
         customerLocation: {
-          lat: 40.7128, // Default coordinates
+          lat: 40.7128,
           lng: -74.0060
         }
       };
@@ -131,7 +125,6 @@ function OrderCheckout() {
     }
   };
 
-  // Navigation logic
   const handleNext = async () => {
     if (currentStep < 3) {
       setCurrentStep((prev) => prev + 1);
@@ -145,18 +138,14 @@ function OrderCheckout() {
       setLoading(true);
       setError('');
 
-      // Validate required fields
       if (!deliveryAddress.fullName || !deliveryAddress.street || !deliveryAddress.city || !deliveryAddress.state || !deliveryAddress.zipCode) {
         setError('Please fill in all required delivery address fields');
         setLoading(false);
         return;
       }
-
-      // Create order using your backend
       const result = await createOrder();
       
       if (result.success) {
-        // Success - navigate to order tracking
         navigate('/ordertracking', { 
           state: { 
             orderId: result.order._id
@@ -453,7 +442,6 @@ function OrderCheckout() {
           </div>
         </div>
 
-        {/* Error Message */}
         {error && (
           <div className="mb-6 p-4 bg-red-100 border border-red-300 text-red-700 rounded-lg">
             <div className="flex items-center gap-2">
@@ -462,8 +450,6 @@ function OrderCheckout() {
             </div>
           </div>
         )}
-
-        {/* Steps indicator */}
         <section className="bg-white shadow-md rounded-2xl p-5 mb-6">
           <div className="grid grid-cols-3 items-center max-w-3xl mx-auto">
             {steps.map((step, index) => (
@@ -504,11 +490,9 @@ function OrderCheckout() {
           </div>
         </section>
 
-        {/* Content section */}
         <section className="bg-white shadow-md rounded-2xl p-8">
           <div className="max-w-4xl mx-auto">{renderStepContent()}</div>
 
-          {/* Navigation buttons */}
           <div className="flex justify-between mt-8">
             {currentStep > 1 ? (
               <button

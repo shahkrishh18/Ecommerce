@@ -159,7 +159,6 @@ function OrderTracking() {
     ];
   }
 
-  // Map backend status to frontend timeline index
   const getTimelineIndex = (status: string): number => {
     switch (status) {
       case 'pending':
@@ -167,7 +166,7 @@ function OrderTracking() {
       case 'preparing':
       case 'ready':
       case 'assigned':
-        return 0; // All map to "Order Placed"
+        return 0;
       case 'picked_up':
         return 1;
       case 'in_transit':
@@ -192,15 +191,12 @@ function OrderTracking() {
       status = 'pending';
     }
 
-    // Find the timestamp for equivalent backend statuses
     let time = '';
     
     if (index === 0) {
-      // For "Order Placed", use the order creation time
-      time = new Date(order.createdAt).toLocaleDateString() + ' ' +
-             new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      time = new Date(order.createdAt).toLocaleDateString() + ' ' + new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     } else {
-      // For other statuses, find from status history
+
       const targetStatus = index === 1 ? 'picked_up' : 
                           index === 2 ? 'in_transit' : 
                           index === 3 ? 'delivered' : '';
@@ -236,35 +232,31 @@ function OrderTracking() {
       });
 
       socketInstance.on('connect', () => {
-        console.log('🔌 WebSocket connected:', socketInstance.id);
+        console.log(' WebSocket connected:', socketInstance.id);
         
         // Join the order room for real-time updates
         socketInstance.emit('joinOrder', orderId);
       });
 
       socketInstance.on('orderUpdated', (updatedOrder: Order) => {
-        console.log('📨 Real-time order update received:', updatedOrder);
+        console.log(' Real-time order update received:', updatedOrder);
         setOrder(updatedOrder);
       });
 
       socketInstance.on('disconnect', () => {
-        console.log('🔌 WebSocket disconnected');
+        console.log('WebSocket disconnected');
       });
 
       socketInstance.on('connect_error', (error: any) => {
-        console.error('❌ WebSocket connection error:', error);
+        console.error('WebSocket connection error:', error);
       });
 
       setSocket(socketInstance);
     };
 
-    // Fetch initial order data
     fetchOrder(orderId);
-    
-    // Initialize WebSocket connection
     initializeSocket();
 
-    // Store the order ID for future reference
     localStorage.setItem('lastOrderId', orderId);
 
     // Cleanup on unmount
@@ -456,17 +448,20 @@ function OrderTracking() {
               ))}
             </div>
 
-            {/* Estimated Delivery */}
-            {order.estimatedDelivery && (
+            {order.createdAt && (
               <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
                 <p className="text-sm text-blue-800 font-medium">
-                  Estimated Delivery: {new Date(order.estimatedDelivery).toLocaleString()}
+                  Estimated Delivery:{" "}
+                  {new Date(
+                    new Date(order.createdAt).setDate(
+                      new Date(order.createdAt).getDate() + 4
+                    )
+                  ).toLocaleString()}
                 </p>
               </div>
             )}
-          </section>
 
-          {/* Order Details */}
+          </section>
           <section className="bg-white rounded-2xl shadow-md p-6">
             <h2 className="text-lg font-semibold mb-6">Order Details</h2>
             <div className="space-y-6">

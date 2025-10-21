@@ -23,6 +23,11 @@ const io = socketIo(server, {
 // Store io instance for use in controllers
 app.set('io', io);
 
+const {cleanupExpiredLocks} = require('./middleware/orderLock');
+setInterval(cleanupExpiredLocks, 60 * 1000);
+
+cleanupExpiredLocks(); // Initial cleanup on server start
+
 // Connect to database
 connectDB();
 
@@ -77,6 +82,35 @@ io.on('connection', (socket) => {
   });
 });
 
+// Socket.io for real-time updates
+io.on('connection', (socket) => {
+  console.log('User connected:', socket.id);
+
+  // Join order room for real-time updates
+  socket.on('joinOrder', (orderId) => {
+    socket.join(`order_${orderId}`);
+  });
+
+  // Join admin room for all admin updates
+  socket.on('joinAdminRoom', () => {
+    socket.join('admin_room');
+    console.log('Admin joined admin room:', socket.id);
+  });
+
+  // Leave admin room
+  socket.on('leaveAdminRoom', () => {
+    socket.leave('admin_room');
+  });
+
+  // Leave order room
+  socket.on('leaveOrder', (orderId) => {
+    socket.leave(`order_${orderId}`);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
 // Error handling middleware (should be last)
 app.use(errorHandler);
 

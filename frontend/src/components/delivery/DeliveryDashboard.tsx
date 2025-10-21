@@ -294,40 +294,90 @@ const fetchUnassignedOrders = async () => {
   };
 
   // Accept order function
-  const acceptOrder = async (orderId: string) => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${API_BASE_URL}/orders/${orderId}/accept`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+  // const acceptOrder = async (orderId: string) => {
+  //   try {
+  //     const token = localStorage.getItem('token');
+  //     const response = await fetch(`${API_BASE_URL}/orders/${orderId}/accept`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Authorization': `Bearer ${token}`,
+  //         'Content-Type': 'application/json',
+  //       },
+  //     });
 
-      if (!response.ok) throw new Error('Failed to accept order');
+  //     if (!response.ok) throw new Error('Failed to accept order');
       
-      const result = await response.json();
-      if (result.success) {
-        // Remove accepted order from list
-        setOrders(prev => prev.filter(order => order._id !== orderId));
-        navigate('/orderaccepted', { state: { order: result.order } });
+  //     const result = await response.json();
+  //     if (result.success) {
+  //       // Remove accepted order from list
+  //       setOrders(prev => prev.filter(order => order._id !== orderId));
+  //       navigate('/orderaccepted', { state: { order: result.order } });
+  //     }
+  //   } catch (error) {
+  //     console.error('Error accepting order:', error);
+  //     alert('Failed to accept order. Please try again.');
+  //   }
+  // };
+
+  // In your DeliveryDashboard component, update the acceptOrder function:
+const acceptOrder = async (orderId: string) => {
+  try {
+    const token = localStorage.getItem('token');
+    
+    // Step 1: Lock the order first
+    const lockResponse = await fetch(`${API_BASE_URL}/delivery/${orderId}/lock`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!lockResponse.ok) {
+      const errorData = await lockResponse.json();
+      if (lockResponse.status === 423) {
+        alert('This order is currently being accepted by another delivery partner. Please try another order.');
+      } else {
+        throw new Error(errorData.message || 'Failed to lock order');
       }
-    } catch (error) {
-      console.error('Error accepting order:', error);
-      alert('Failed to accept order. Please try again.');
+      return;
     }
-  };
+
+    // Step 2: Accept the order (now it's locked for us)
+    const acceptResponse = await fetch(`${API_BASE_URL}/delivery/${orderId}/accept`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!acceptResponse.ok) {
+      const errorData = await acceptResponse.json();
+      throw new Error(errorData.message || 'Failed to accept order');
+    }
+    
+    const result = await acceptResponse.json();
+    if (result.success) {
+      // Remove accepted order from list
+      setOrders(prev => prev.filter(order => order._id !== orderId));
+      navigate('/orderaccepted', { state: { order: result.order } });
+    }
+  } catch (error: any) {
+    console.error('Error accepting order:', error);
+    alert(error.message || 'Failed to accept order. Please try again.');
+  }
+};
 
   // Calculate distance (mock function - replace with real geolocation)
-  const calculateDistance = (order: Order): string => {
+  const calculateDistance = () => {
     // Mock distance calculation - in real app, use customerLocation vs delivery partner location
     const distances = ['1.2 km', '2.3 km', '0.8 km', '3.1 km', '1.5 km'];
     return distances[Math.floor(Math.random() * distances.length)];
   };
 
   // Calculate ETA (mock function)
-  const calculateETA = (order: Order): string => {
+  const calculateETA = () => {
     // Mock ETA calculation
     const times = ['15 mins', '20 mins', '25 mins', '30 mins', '35 mins'];
     return times[Math.floor(Math.random() * times.length)];
@@ -459,9 +509,6 @@ const fetchUnassignedOrders = async () => {
         <div className="bg-white rounded-2xl shadow-sm p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-lg font-semibold">Available Orders ({orders.length})</h2>
-            <span className="text-orange-600 font-medium">
-              {orders.filter(order => isPriorityOrder(order)).length} High Priority
-            </span>
           </div>
 
           {orders.length === 0 ? (
@@ -474,8 +521,8 @@ const fetchUnassignedOrders = async () => {
             <div className="space-y-4">
               {orders.map((order) => {
                 const priority = isPriorityOrder(order);
-                const distance = calculateDistance(order);
-                const eta = calculateETA(order);
+                const distance = calculateDistance();
+                const eta = calculateETA();
                 const amount = calculateDeliveryAmount(order);
                 const totalItems = order.items.reduce((sum, item) => sum + item.quantity, 0);
 

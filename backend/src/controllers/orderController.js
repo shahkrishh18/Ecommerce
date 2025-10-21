@@ -72,6 +72,12 @@ exports.createOrder = async (req, res, next) => {
     
     await order.populate('items.product', 'name images');
     await order.populate('customer', 'profile');
+
+    // In createOrder function, after order creation:
+req.app.get('io').emit('newOrderAvailable');
+
+// In updateOrderStatus function, after status update:
+req.app.get('io').to('admin_room').emit('orderUpdated', order);
     
     req.app.get('io').emit('newOrderAvailable');
     res.status(201).json({

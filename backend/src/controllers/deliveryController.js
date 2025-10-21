@@ -61,6 +61,7 @@ exports.getDeliveryStats = async (req, res, next) => {
 };
 
 // Update delivery status
+// Add this to your deliveryController.js if missing
 exports.updateDeliveryStatus = async (req, res, next) => {
   try {
     const { status, note } = req.body;
@@ -110,6 +111,7 @@ exports.updateDeliveryStatus = async (req, res, next) => {
       order.deliveryTime = Math.floor((new Date() - order.updatedAt) / 60000);
       
       // Mark delivery partner as available again
+      const User = require('../models/User');
       await User.findByIdAndUpdate(req.user.id, {
         'deliveryDetails.isAvailable': true
       });
@@ -120,15 +122,9 @@ exports.updateDeliveryStatus = async (req, res, next) => {
     await order.populate('items.product', 'name images');
     await order.populate('deliveryPartner', 'profile');
 
-    // Emit real-time update to order room and customer
+    // Emit real-time update to order room and admin room
     req.app.get('io').to(`order_${order._id}`).emit('orderUpdated', order);
-    
-    // Also emit to delivery partner room
-    req.app.get('io').to(`delivery_${req.user.id}`).emit('deliveryStatusUpdated', {
-      orderId: order._id,
-      status: order.status,
-      timestamp: new Date()
-    });
+    req.app.get('io').to('admin_room').emit('orderUpdated', order);
 
     res.status(200).json({
       success: true,
@@ -156,6 +152,73 @@ exports.getDeliveryStatus = async (req, res, next) => {
         message: 'Order not found or not assigned to you'
       });
     }
+
+    res.status(200).json({
+      success: true,
+      order
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.acceptOrder = async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found'
+      });
+    }
+
+    // Verify the order is still locked by this user
+    if (!order.isLocked || order.lockedBy.toString() !== req.user.id) {
+      return res.status(409).json({
+        success: false,
+        message: 'Order lock expired or invalid. Please try accepting again.'
+      });
+    }
+
+    if (order.deliveryPartner) {
+      return res.status(400).json({
+        success: false,
+        message: 'Order already assigned'
+      });
+    }
+
+    const User = require('../models/User');
+
+    // Assign current delivery partner
+    order.deliveryPartner = req.user.id;
+    order.status = 'assigned';
+    
+    // Release the lock
+    order.isLocked = false;
+    order.lockedBy = undefined;
+    order.lockedAt = undefined;
+    order.lockExpiresAt = undefined;
+    
+    order.statusHistory.push({
+      status: 'assigned',
+      note: `Accepted by delivery partner`,
+      updatedBy: req.user.id
+    });
+
+    // Mark delivery partner as unavailable
+    await User.findByIdAndUpdate(req.user.id, {
+      'deliveryDetails.isAvailable': false
+    });
+
+    await order.save();
+    await order.populate('customer', 'profile');
+    await order.populate('items.product', 'name images');
+
+    // Emit real-time update
+    req.app.get('io').to(`order_${order._id}`).emit('orderUpdated', order);
+    req.app.get('io').emit('orderAssigned', { orderId: order._id });
+    req.app.get('io').emit('orderLockReleased', { orderId: order._id });
 
     res.status(200).json({
       success: true,

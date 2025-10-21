@@ -337,48 +337,91 @@ function DeliveryStatus() {
   };
 
   // Update delivery status
-  const updateDeliveryStatus = async (newStatus: string) => {
-    try {
-      setUpdating(true);
-      const token = localStorage.getItem('token');
+  // const updateDeliveryStatus = async (newStatus: string) => {
+  //   try {
+  //     setUpdating(true);
+  //     const token = localStorage.getItem('token');
       
-      const response = await fetch(`${API_BASE_URL}/delivery/status/${orderId}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          status: newStatus,
-          note: `Status updated to ${newStatus}`
-        }),
-      });
+  //     const response = await fetch(`${API_BASE_URL}/delivery/status/${orderId}`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Authorization': `Bearer ${token}`,
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         status: newStatus,
+  //         note: `Status updated to ${newStatus}`
+  //       }),
+  //     });
 
-      if (!response.ok) {
-        throw new Error('Failed to update status');
-      }
+  //     if (!response.ok) {
+  //       throw new Error('Failed to update status');
+  //     }
 
-      const result = await response.json();
+  //     const result = await response.json();
       
-      if (result.success) {
-        setOrder(result.order);
-        setSteps(getTimelineFromOrder(result.order));
+  //     if (result.success) {
+  //       setOrder(result.order);
+  //       setSteps(getTimelineFromOrder(result.order));
         
-        // If delivered, navigate back to dashboard after delay
-        if (newStatus === 'delivered') {
-          setTimeout(() => {
-            navigate("/deliverydashboard");
-          }, 2000);
-        }
-      }
-    } catch (err: any) {
-      console.error('Error updating status:', err);
-      alert('Failed to update status. Please try again.');
-    } finally {
-      setUpdating(false);
-    }
-  };
+  //       // If delivered, navigate back to dashboard after delay
+  //       if (newStatus === 'delivered') {
+  //         setTimeout(() => {
+  //           navigate("/deliverydashboard");
+  //         }, 2000);
+  //       }
+  //     }
+  //   } catch (err: any) {
+  //     console.error('Error updating status:', err);
+  //     alert('Failed to update status. Please try again.');
+  //   } finally {
+  //     setUpdating(false);
+  //   }
+  // };
 
+  // In your DeliveryStatus component, update the updateDeliveryStatus function:
+const updateDeliveryStatus = async (newStatus: string) => {
+  try {
+    setUpdating(true);
+    const token = localStorage.getItem('token');
+    
+    const response = await fetch(`${API_BASE_URL}/delivery/${orderId}/status`, { // ✅ Correct endpoint
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        status: newStatus,
+        note: `Status updated to ${newStatus}`
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to update status');
+    }
+
+    const result = await response.json();
+    
+    if (result.success) {
+      setOrder(result.order);
+      setSteps(getTimelineFromOrder(result.order));
+      
+      // If delivered, navigate back to dashboard after delay
+      if (newStatus === 'delivered') {
+        setTimeout(() => {
+          navigate("/deliverydashboard");
+        }, 2000);
+      }
+    }
+  } catch (err: any) {
+    console.error('Error updating status:', err);
+    alert(err.message || 'Failed to update status. Please try again.');
+  } finally {
+    setUpdating(false);
+  }
+};
   // Get next status to update to
   const getNextStatus = (): string | null => {
     if (!order) return null;
@@ -674,7 +717,7 @@ function DeliveryStatus() {
         )}
 
         {/* Action Button */}
-        <div className="fixed bottom-6 left-0 right-0 px-4">
+        <div className=" bottom-6 left-0 right-0 px-4">
           <div className="max-w-7xl mx-auto">
             <button 
               onClick={handleStatusUpdate}

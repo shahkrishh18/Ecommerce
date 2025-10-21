@@ -111,7 +111,21 @@ const orderSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User'
     }
-  }]
+  }],
+  isLocked: {
+    type: Boolean,
+    default: false
+  },
+  lockedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  lockedAt: {
+    type: Date
+  },
+  lockExpiresAt: {
+    type: Date
+  }
 }, {
   timestamps: true
 });

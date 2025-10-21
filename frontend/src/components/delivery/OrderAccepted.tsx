@@ -88,7 +88,7 @@ function OrderAccepted() {
   };
 
   // Handle navigation to maps
-  const handleNavigate = (address: string, type: 'pickup' | 'delivery') => {
+  const handleNavigate = (address: string) => {
     const mapUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`;
     window.open(mapUrl, '_blank');
   };
@@ -220,7 +220,7 @@ function OrderAccepted() {
                   <p className="text-gray-600 mt-1">Restaurant Location</p>
                   <p className="text-sm text-gray-500">Near {order.deliveryAddress.city}</p>
                   <button 
-                    onClick={() => handleNavigate(`Restaurant near ${order.deliveryAddress.city}`, 'pickup')}
+                    onClick={() => handleNavigate(`Restaurant near ${order.deliveryAddress.city}`)}
                     className="flex items-center gap-2 text-blue-600 text-sm font-medium mt-2"
                   >
                     <Navigation size={16} />
@@ -245,7 +245,7 @@ function OrderAccepted() {
                     {order.deliveryAddress.street}, {order.deliveryAddress.city}
                   </p>
                   <button 
-                    onClick={() => handleNavigate(order.deliveryAddress.street, 'delivery')}
+                    onClick={() => handleNavigate(order.deliveryAddress.street)}
                     className="flex items-center gap-2 text-blue-600 text-sm font-medium mt-2"
                   >
                     <Navigation size={16} />

@@ -13,19 +13,6 @@ interface Order {
   };
 }
 
-interface DeliveryPartner {
-  _id: string;
-  profile: {
-    firstName: string;
-    lastName: string;
-  };
-  deliveryDetails: {
-    isAvailable: boolean;
-    totalDeliveries: number;
-  };
-  lastLogin?: string;
-}
-
 interface LiveStats {
   statusCounts: Array<{
     _id: string;
@@ -95,8 +82,7 @@ function LiveStatus({ stats, orders }: LiveStatusProps) {
     }));
 
   const getActiveDeliveryPartners = () => {
-    const activePartners = new Map();
-    
+
     orders.forEach(order => {
       if (order.status === 'assigned' || order.status === 'picked_up' || order.status === 'in_transit') {
       }

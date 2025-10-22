@@ -3,7 +3,9 @@ import type { DeliveryPartner } from './AdminDashboard';
 
 interface DeliveryPartnersProps {
   partners: DeliveryPartner[];
+
 }
+
 
 function DeliveryPartners({ partners }: DeliveryPartnersProps) {
 
@@ -38,8 +40,9 @@ function DeliveryPartners({ partners }: DeliveryPartnersProps) {
   };
 
   const calculateTodaysDeliveries = (partner: DeliveryPartner) => {
-    // Mock calculation - in real app, count today's deliveries from orders
-    return Math.floor(Math.random() * 8);
+    // Mock calculation - estimate today's deliveries based on totalDeliveries (max 8)
+    const maxPossible = Math.min(8, partner.deliveryDetails.totalDeliveries);
+    return Math.floor(Math.random() * (maxPossible + 1));
   };
 
   // Get partner status

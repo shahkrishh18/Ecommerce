@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react";
 import type { JSX } from "react";
 import { io } from "socket.io-client";
 
-const API_BASE_URL = 'http://localhost:5000/api';
-const SOCKET_URL = 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const SOCKET_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:5000';
 
 interface Order {
   _id: string;
@@ -56,7 +56,7 @@ function OrderTracking() {
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [socket, setSocket] = useState<any>(null);
+  const [_socket, setSocket] = useState<any>(null);
 
   // Get order ID from multiple possible sources
   const orderId = location.state?.orderId || 

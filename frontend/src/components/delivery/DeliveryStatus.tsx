@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
 
-const API_BASE_URL = 'http://localhost:5000/api';
-const SOCKET_URL = 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const SOCKET_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:5000';
 
 interface TimelineStep {
   id: number;
@@ -40,7 +40,7 @@ function DeliveryStatus() {
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-  const [socket, setSocket] = useState<any>(null);
+  const [_socket, setSocket] = useState<any>(null);
   
   // Get order ID from multiple sources
   const orderFromState = location.state?.order;

@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
-const API_BASE_URL = 'http://localhost:5000/api';
-const SOCKET_URL = 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const SOCKET_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:5000';
 
 interface Order {
   _id: string;

@@ -1,3 +1,142 @@
+// // src/server.js
+// const express = require('express');
+// const cors = require('cors');
+// const helmet = require('helmet');
+// const rateLimit = require('express-rate-limit');
+// const http = require('http');
+// const socketIo = require('socket.io');
+// require('dotenv').config();
+
+// const connectDB = require('./config/database');
+// const routes = require('./routes');
+// const errorHandler = require('./middleware/errorHandler');
+
+// const app = express();
+// const server = http.createServer(app);
+// const io = socketIo(server, {
+//   cors: {
+//     origin: process.env.CORS_ORIGIN || "http://localhost:80",
+//     methods: ["GET", "POST"]
+//   }
+// });
+
+// // Store io instance for use in controllers
+// app.set('io', io);
+
+// const {cleanupExpiredLocks} = require('./middleware/orderLock');
+// setInterval(cleanupExpiredLocks, 60 * 1000);
+
+// cleanupExpiredLocks(); // Initial cleanup on server start
+
+// // Connect to database
+// connectDB();
+
+// // Security middleware
+// app.use(helmet());
+
+// // Rate limiting
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 minutes
+//   max: 100 // limit each IP to 100 requests per windowMs
+// });
+// app.use(limiter);
+
+// // CORS
+
+// const allowedOrigins = ["http://localhost", "http://frontend:80"];
+// app.use(cors({
+//   origin: (origin, callback) => {
+//     if (!origin || allowedOrigins.includes(origin)) {
+//       callback(null, origin);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   },
+//   credentials: true
+// }));
+
+// // Body parsing middleware
+// app.use(express.json({ limit: '10mb' }));
+// app.use(express.urlencoded({ extended: true }));
+
+// // Routes
+// app.use('/api', routes);
+
+// // Health check
+// app.get('/health', (req, res) => {
+//   res.status(200).json({ 
+//     success: true, 
+//     message: 'QuickCommerce API is running',
+//     timestamp: new Date().toISOString()
+//   });
+// });
+
+// // Socket.io for real-time updates
+// io.on('connection', (socket) => {
+//   console.log('User connected:', socket.id);
+
+//   // Join order room for real-time updates
+//   socket.on('joinOrder', (orderId) => {
+//     socket.join(`order_${orderId}`);
+//   });
+
+//   // Leave order room
+//   socket.on('leaveOrder', (orderId) => {
+//     socket.leave(`order_${orderId}`);
+//   });
+
+//   socket.on('disconnect', () => {
+//     console.log('User disconnected:', socket.id);
+//   });
+// });
+
+// // Socket.io for real-time updates
+// io.on('connection', (socket) => {
+//   console.log('User connected:', socket.id);
+
+//   // Join order room for real-time updates
+//   socket.on('joinOrder', (orderId) => {
+//     socket.join(`order_${orderId}`);
+//   });
+
+//   // Join admin room for all admin updates
+//   socket.on('joinAdminRoom', () => {
+//     socket.join('admin_room');
+//     console.log('Admin joined admin room:', socket.id);
+//   });
+
+//   // Leave admin room
+//   socket.on('leaveAdminRoom', () => {
+//     socket.leave('admin_room');
+//   });
+
+//   // Leave order room
+//   socket.on('leaveOrder', (orderId) => {
+//     socket.leave(`order_${orderId}`);
+//   });
+
+//   socket.on('disconnect', () => {
+//     console.log('User disconnected:', socket.id);
+//   });
+// });
+// // Error handling middleware (should be last)
+// app.use(errorHandler);
+
+// // Handle unhandled promise rejections
+// process.on('unhandledRejection', (err, promise) => {
+//   console.log('Unhandled Rejection at:', promise, 'reason:', err);
+//   server.close(() => {
+//     process.exit(1);
+//   });
+// });
+
+// const PORT = process.env.PORT || 5000;
+
+// server.listen(PORT, () => {
+//   console.log(`QuickCommerce Pro server running on port ${PORT}`);
+//   console.log(`Environment: ${process.env.NODE_ENV}`);
+// });
+
 // src/server.js
 const express = require('express');
 const cors = require('cors');
@@ -10,44 +149,62 @@ require('dotenv').config();
 const connectDB = require('./config/database');
 const routes = require('./routes');
 const errorHandler = require('./middleware/errorHandler');
+const { cleanupExpiredLocks } = require('./middleware/orderLock');
 
 const app = express();
 const server = http.createServer(app);
+
+// ✅ Socket.io with proper CORS support for Docker
 const io = socketIo(server, {
   cors: {
-    origin: process.env.CORS_ORIGIN || "http://localhost:3000",
-    methods: ["GET", "POST"]
+    origin: process.env.CORS_ORIGIN?.split(',') || [
+      'http://localhost',
+      'http://localhost:80',
+      'http://frontend',
+      'http://frontend:80'
+    ],
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 
-// Store io instance for use in controllers
+// Attach io to app for use in routes/controllers
 app.set('io', io);
 
-const {cleanupExpiredLocks} = require('./middleware/orderLock');
+// Periodic cleanup task
 setInterval(cleanupExpiredLocks, 60 * 1000);
-
-cleanupExpiredLocks(); // Initial cleanup on server start
+cleanupExpiredLocks(); // Initial cleanup
 
 // Connect to database
 connectDB();
 
-// Security middleware
+// Security
 app.use(helmet());
 
-// Rate limiting
+// Rate limiter
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 100
 });
 app.use(limiter);
 
-// CORS
+// ✅ CORS setup (dynamic + Docker support)
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',')
+  : ['http://localhost', 'http://frontend', 'http://frontend:80'];
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
-// Body parsing middleware
+// JSON parser
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -56,18 +213,18 @@ app.use('/api', routes);
 
 // Health check
 app.get('/health', (req, res) => {
-  res.status(200).json({ 
-    success: true, 
+  res.status(200).json({
+    success: true,
     message: 'QuickCommerce API is running',
     timestamp: new Date().toISOString()
   });
 });
 
-// Socket.io for real-time updates
+// ✅ Single socket.io connection handler
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
-  // Join order room for real-time updates
+  // Join order room
   socket.on('joinOrder', (orderId) => {
     socket.join(`order_${orderId}`);
   });
@@ -77,21 +234,7 @@ io.on('connection', (socket) => {
     socket.leave(`order_${orderId}`);
   });
 
-  socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
-  });
-});
-
-// Socket.io for real-time updates
-io.on('connection', (socket) => {
-  console.log('User connected:', socket.id);
-
-  // Join order room for real-time updates
-  socket.on('joinOrder', (orderId) => {
-    socket.join(`order_${orderId}`);
-  });
-
-  // Join admin room for all admin updates
+  // Join admin room
   socket.on('joinAdminRoom', () => {
     socket.join('admin_room');
     console.log('Admin joined admin room:', socket.id);
@@ -102,29 +245,22 @@ io.on('connection', (socket) => {
     socket.leave('admin_room');
   });
 
-  // Leave order room
-  socket.on('leaveOrder', (orderId) => {
-    socket.leave(`order_${orderId}`);
-  });
-
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
   });
 });
-// Error handling middleware (should be last)
+
+// Error handling
 app.use(errorHandler);
 
 // Handle unhandled promise rejections
 process.on('unhandledRejection', (err, promise) => {
-  console.log('Unhandled Rejection at:', promise, 'reason:', err);
-  server.close(() => {
-    process.exit(1);
-  });
+  console.error('Unhandled Rejection:', err);
+  server.close(() => process.exit(1));
 });
 
 const PORT = process.env.PORT || 5000;
-
 server.listen(PORT, () => {
-  console.log(`QuickCommerce Pro server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV}`);
+  console.log(`🚀 QuickCommerce Pro backend running on port ${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV}`);
 });

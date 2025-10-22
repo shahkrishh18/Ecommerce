@@ -77,7 +77,7 @@ function App() {
           path="/deliverypartners"
           element={
             <ProtectedRoute requiredRole='admin'>
-              <DeliveryPartners />
+              <DeliveryPartners partners={[]} />
             </ProtectedRoute>
           }
         />
